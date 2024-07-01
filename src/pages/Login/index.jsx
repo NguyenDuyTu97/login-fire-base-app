@@ -6,6 +6,8 @@ import {
 } from "firebase/auth";
 import { NavLink, useNavigate } from "react-router-dom";
 import { auth, provider } from "../../firebase";
+import { googleLogout, useGoogleLogin } from "@react-oauth/google";
+import { setGoogleAccessToken } from "../../utils/localStorage";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -40,6 +42,11 @@ const Login = () => {
         const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
+
+        if (token) {
+          navigate("/");
+        }
+
         // IdP data available using getAdditionalUserInfo(result)
         // ...
       })
@@ -54,6 +61,27 @@ const Login = () => {
         // ...
       });
   };
+
+  const onLoginByGoogle = useGoogleLogin({
+    onSuccess: async (response) => {
+      const { access_token } = response;
+      setGoogleAccessToken(access_token);
+
+      const res = await fetch(
+        `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${access_token}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            Accept: "application/json",
+          },
+        }
+      );
+      const result = await res.json();
+      console.log(result, "result 1125");
+    },
+    onError: (error) => console.log("Login Failed:", error),
+  });
 
   return (
     <>
@@ -96,9 +124,12 @@ const Login = () => {
               No account yet? <NavLink to="/sign-up">Sign up</NavLink>
             </p>
           </div>
-          <div>
+          {/* <div>
             <button onClick={onLoginWithGoogle}>Login with google</button>
-          </div>
+          </div> */}
+
+          <br />
+          <button onClick={onLoginByGoogle}>Sign in with Google 🚀 </button>
         </section>
       </main>
     </>
