@@ -68,17 +68,36 @@ const Login = () => {
       setGoogleAccessToken(access_token);
 
       const res = await fetch(
-        `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${access_token}`,
+        `http://localhost:8080/api/verify-login-with-google`,
         {
-          method: "GET",
+          method: "POST",
           headers: {
-            Authorization: `Bearer ${access_token}`,
             Accept: "application/json",
+            "Content-Type": "application/json",
           },
+          body: JSON.stringify({ accessToken: access_token }),
         }
       );
+
       const result = await res.json();
-      console.log(result, "result 1125");
+
+      console.log(result, "result 0001");
+
+      // const res = await fetch(
+      //   `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${access_token}`,
+      //   {
+      //     method: "GET",
+      //     headers: {
+      //       Authorization: `Bearer ${access_token}`,
+      //       Accept: "application/json",
+      //     },
+      //   }
+      // );
+      // const result = await res.json();
+      // console.log(result, "result of user info");
+      // if(result){
+      //   navigate('/');
+      // }
     },
     onError: (error) => console.log("Login Failed:", error),
   });

@@ -2,4 +2,8 @@ const setGoogleAccessToken = (token) => {
   return localStorage.setItem("google_access_token", token);
 };
 
-export { setGoogleAccessToken };
+const getGoogleAccessToken = () => {
+  return localStorage.getItem("google_access_token");
+};
+
+export { setGoogleAccessToken, getGoogleAccessToken };

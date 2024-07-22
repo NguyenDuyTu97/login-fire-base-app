@@ -4,12 +4,16 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import CustomRouter from "./components/customRouter";
+import customHistory from "./components/customHistory";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <GoogleOAuthProvider clientId="840559433704-iobvec3lult0r7kq4cqhuirjfe39gaq7.apps.googleusercontent.com">
     <React.StrictMode>
-      <App />
+      <CustomRouter history={customHistory}>
+        <App />
+      </CustomRouter>
     </React.StrictMode>
   </GoogleOAuthProvider>
 );
